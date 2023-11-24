@@ -4,7 +4,7 @@ services:
     image: biocontainers/fastp:v0.20.1_cv1
     volumes:
       - .:/data
-    command: fastp --in1 /data/input.fastq --out1 /data/output.fastq
+    command: fastp -i data/output_MTHFR_1.fastq  -I data/output_MTHFR_2.fastq --out1 /data/output1.fastq --out2 /data/output2.fastq
     platform: linux/amd64
 
   bowtie2:
@@ -13,14 +13,23 @@ services:
       - fastp
     volumes:
       - .:/data
-    command: bowtie2 -x /data/index -1 /data/output.fastq -2 /data/output_r2.fastq -S /data/output.sam
+    command: bowtie2-build data/GCA_000001405.29_GRCh38.p14_genomic.fasta index_name && bowtie2 --no-unal -p 4 -x index_name -1 /data/output1.fastq -2 /data/output2.fastq -S /data/output.sam
+    platform: linux/amd64
+
+  samtools:
+    image: biocontainers/samtools:v1.9-4-deb_cv1
+    depends_on:
+      - bowtie2
+    volumes:
+      - .:/data
+    command: samtools view -bS /data/output.sam -o /data/sort_output.bam 
     platform: linux/amd64
 
   freebayes:
     image: biocontainers/freebayes:v1.2.0-2-deb_cv1
     depends_on:
-      - bowtie2
+      - samtools
     volumes:
       - .:/data
-    command: sh -c "freebayes -f /data/reference.fa /data/input.bam > /data/output.vcf"
+    command: sh -c "freebayes -f data/GCA_000001405.29_GRCh38.p14_genomic.fasta /data/sort_output.bam > /data/output.vcf"
     platform: linux/amd64
