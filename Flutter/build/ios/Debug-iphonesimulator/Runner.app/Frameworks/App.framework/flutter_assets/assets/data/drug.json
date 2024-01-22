@@ -10,7 +10,7 @@
       "EffectOnDrugResponse": ["Reduced efficacy in poor metabolizers. Increased risk of side effects in ultra-rapid metabolizers"]
     },
     {
-      "GeneVariant": "CYP2C9",
+      "GeneVariant": "CYP2C19",
       "Drug": ["NSAIDs (e.g., Celecoxib)"],
       "EffectOnDrugResponse": ["Altered drug metabolism, affecting efficacy and risk of side effects"]
     },
