@@ -32,14 +32,14 @@ Technologies such as FastP, Bowtie 2, Wgsim, and Freebayes have been containeriz
 The Dockerfile sets up the necessary dependencies and tools for the genomics pipeline. It also includes a wrapper script, `pipeline_wrapper.sh`, that orchestrates the execution of the pipeline steps.
 
 ## Usage
-
+***
 1. Make sure you have Docker installed on your system.
 2. Clone this repository to your local machine.
 3. To build the Docker image, navigate to the directory containing the Dockerfile and run the following command:
-```bash
-docker build -t genomics-pipeline:latest . 
-4. Run the following command to start the bioinformatics pipeline:
 
-    ```bash
-    docker-compose up
-    ```
+```
+$ docker build -t genomics-pipeline:latest .
+$ docker-compose up
+```
+
+
