@@ -37,7 +37,7 @@ The Dockerfile sets up the necessary dependencies and tools for the genomics pip
 2. Clone this repository to your local machine.
 3. Before you build the Docker image, make sure to choose the comparison script you want to use. There are two scripts in the script directory:
 - `genome_comparison_CYP2D6_CYP3A4.py`
-- `genome_comparison_MTHFR.py`
+- `genome_comparison_MTHFR.py` (for testing the pipeline)
 
 ## Running `genome_comparison_CYP2D6_CYP3A4.py`
 **Note:** Building the Docker image is not required for running `genome_comparison_CYP2D6_CYP3A4.py` as the necessary VCF file, `CYP2D6_CYP3A4.vcf`, is already provided.
@@ -61,7 +61,7 @@ The Dockerfile sets up the necessary dependencies and tools for the genomics pip
    pip install pandas numpy
    ```
 ## Running `genome_comparison_MTHFR.py`
-**Note** If you want to run genome_comparison_MTHFR.py, all you need to do is follow the next step to build the Docker image and run the pipeline
+**Note** If you want to run genome_comparison_MTHFR.py, all you need to do is follow the next step to build the Docker image and run the pipeline.
 
 1. To build the Docker image, navigate to the directory containing the Dockerfile and run the following command:
 
