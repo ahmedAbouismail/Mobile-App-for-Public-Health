@@ -37,11 +37,11 @@ def numpy_array_to_json(numpy_array):
     return json.dumps(python_list)
 
 
-# Function to filter variants based on search criteria
-def filter_variants(variants_df, search_values, search_positions, search_gene_variant):
+# # Function to detect variants based on position and chromosom
+def identify_variants(variants_df, chrom, position, gene_variant):
     results = []
 
-    for value, position, gene_variant in zip(search_values, search_positions, search_gene_variant):
+    for value, position, gene_variant in zip(chrom, position, gene_variant):
         if isinstance(position, tuple):  # Check if the position is a range
             result_df = variants_df[(variants_df['#CHROM'] == value) & (variants_df['POS'].between(*position))].copy()
         else:
@@ -55,7 +55,7 @@ def filter_variants(variants_df, search_values, search_positions, search_gene_va
 
 
 # VCF file name
-vcf_file = 'Pipeline/data/output.vcf'
+vcf_file = 'Pipeline/output.vcf'
 
 # Parse the VCF file and create the DataFrame
 variants_df = parse_vcf(vcf_file)
@@ -66,18 +66,13 @@ variants_df['#CHROM'] = variants_df['#CHROM'].apply(minimize_chrom)
 # Convert the 'POS' column to numeric values, coercing errors to NaN.
 variants_df['POS'] = pd.to_numeric(variants_df['POS'], errors='coerce')
 
-# Define search criteria for genetic variants
-# WIP [IMPORTANT]: search_positions are dummy data
-
-search_values = ['NC_000016', 'NC_000001', 'NC_000007', 'NC_000001']
-search_positions = [(28971111, 28971113), 28975712, 1641693, 28971111]
-search_gene_variant = ['G6PD', 'CYP2D6', 'CYP2C19', 'MTHFR']
+# Search criteria for genetic variants
+chrom = ['NC_000001', 'NC_000001', 'NC_000001', 'NC_000022', 'NC_000007']
+position = [(113761832, 113812476), (42125531, 42130881), 603038, (42125531, 42130881), (99756967,99784184)]
+gene_variant = ['RSBN1', 'CYP2D6', 'MTHFR','CYP2D6', 'CYP3A4']
 
 # Filter variants based on search criteria
-final_result = filter_variants(variants_df, search_values, search_positions, search_gene_variant)
-
-# Print the final DataFrame as a formatted string
-#print(final_result.to_string(index=False))
+final_result = identify_variants(variants_df, chrom, position, gene_variant)
 
 # Extract the 'Gene variants found' column as a NumPy array
 gene_variants_array = final_result['Gene variants found'].to_numpy()
@@ -98,6 +93,3 @@ with open(json_file_path, 'w') as json_file:
 # Print gene_variants_array
 print(gene_variants_array)
 
-#Output: gene variants in JSON for communication with Flutter frontend
-# TO DO: SEND GENE_VARIANTS_JSON TO FLUTTER FRONTEND
-gene_variants_json = numpy_array_to_json(gene_variants_array)
